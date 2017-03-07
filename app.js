@@ -12,7 +12,7 @@ app.get('/temp', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.send('Hello Worldddd!');
+    res.send('Hello hihihih!');
     var tmp = connect.select();
     console.log(tmp);
 });
