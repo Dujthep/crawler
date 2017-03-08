@@ -4,17 +4,17 @@ var request = require('request');
 var URL = require('url-parse');
 var express = require('express');
 var app = express();
-var connect = require('./connection');
-var crawlering = require('./crawler.js');
+var crawler = require('./crawler.js');
 
 app.get('/temp', function(req, res) {
-    var temp = crawlering.getData('http://www.thairath.co.th/content/3');
+
+    console.log(tmp);
 });
 
 app.get('/', function(req, res) {
-    res.send('Hello hihihih!');
-    var tmp = connect.select();
-    console.log(tmp);
+    var tmp = crawler.getData('http://www.thairath.co.th/content/3');
+    console.log(JSON.stringify(tmp));
+  //  res.send(tmp);
 });
 
 app.listen(3000, function() {

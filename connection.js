@@ -2,8 +2,19 @@ var MongoClient = require('mongodb').MongoClient,assert = require('assert');
 var url = 'mongodb://localhost:27017/myproject';
 
 module.exports = {
-    insert: function() {
-        console.log('insert')
+    insert: function(document) {
+      MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        
+          db.collection('thairath').insert(document, function(err, records) {
+            if (err) throw err;
+            return 'Insert Success';
+          });
+
+          db.close();
+      });
+
+
     },
     delete: function() {
         return 'delete';
