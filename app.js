@@ -5,7 +5,11 @@ var URL = require('url-parse');
 var express = require('express');
 var app = express();
 var crawler = require('./crawler.js');
-var elast = require('./elastic.js');
+var client  = require('./elastic.js');
+
+client.cluster.health({},function(err,resp,status) {
+  console.log("-- Client Health --",resp);
+});
 
 app.get('/temp', function(req, res) {
 
