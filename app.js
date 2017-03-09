@@ -5,6 +5,7 @@ var URL = require('url-parse');
 var express = require('express');
 var app = express();
 var crawler = require('./crawler.js');
+var elast = require('./elastic.js');
 
 app.get('/temp', function(req, res) {
 
