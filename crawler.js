@@ -27,25 +27,22 @@ module.exports = {
           var date = $('time').text().trim();
           var title = $('section[id=headerContent] h1').text().trim();
           var content = $('section[id=mainContent]').text().trim();
-          var image = [];
+          var img = [];
 
           $('section[id=mainContent] img').each(function(i, element){
             var src = $(element).attr("src");
-            image.push(src);
-
+            img.push(src);
           });
 
-      /*    result = JSON.stringify({
+          result = JSON.stringify({
                       'URL'  : url,
                        'PostDate' : date,
                        'Title' : title,
                        'Content' : content,
                        'Image'  : img
-                     }); */
-
-        //  connectMongo.insert(result);
-
-        //  callback(result);
+                     });
+                     
+          callback(result);
         }else{
           callback(response.statusCode);
         }

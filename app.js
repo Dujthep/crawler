@@ -12,8 +12,9 @@ app.get('/temp', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-  crawler.getData('http://www.thairath.co.th/content/880611', function(message) {
-      console.log(message);
+  var result;
+  crawler.getData('http://www.thairath.co.th/content/880611', function(callback) {
+      console.log(callback);
   });
 });
 
