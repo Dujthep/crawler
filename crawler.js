@@ -2,7 +2,7 @@ var Crawler = require("node-webcrawler");
 var request = require('request');
 var cheerio = require('cheerio');
 var URL = require('url-parse');
-var connect = require('./connection');
+var connectMongo = require('./connection');
 var c = new Crawler();
 
 
@@ -20,21 +20,35 @@ module.exports = {
           }
 
       request(options, function (error, response, body) {
-        if(error) return callback(error);
+        if(!error && response.statusCode == 200){
+          var $ = cheerio.load(body)
 
-        var $ = cheerio.load(body)
+          var url = url;
+          var date = $('time').text().trim();
+          var title = $('section[id=headerContent] h1').text().trim();
+          var content = $('section[id=mainContent]').text().trim();
+          var image = [];
 
-        var date = $('time').text().trim();
-        var title = $('section[id=headerContent] h1').text().trim();
-        var content = $('section[id=mainContent]').text().trim();
+          $('section[id=mainContent] img').each(function(i, element){
+            var src = $(element).attr("src");
+            image.push(src);
 
-        result = JSON.stringify({
-                     'PostDate' : date,
-                     'Title' : title,
-                     'Content' : content
-                   });
+          });
 
-        callback(result);
+      /*    result = JSON.stringify({
+                      'URL'  : url,
+                       'PostDate' : date,
+                       'Title' : title,
+                       'Content' : content,
+                       'Image'  : img
+                     }); */
+
+        //  connectMongo.insert(result);
+
+        //  callback(result);
+        }else{
+          callback(response.statusCode);
+        }
       });
     }
 };
