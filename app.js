@@ -6,18 +6,15 @@ var app = express();
 var crawler = require('./crawler.js');
 var elast = require('./elastic.js');
 
-elast.cluster.health({}, function(err, resp, status) {
-    console.log("-- Client Health --", resp);
-});
-
+elast.search();
 app.get('/temp', function(req, res) {
 
     console.log(tmp);
 });
 
 app.get('/', function(req, res) {
-    var tmp = crawler.getData('http://www.thairath.co.th/content/3');
-    console.log(JSON.stringify(tmp));
+    // var tmp = crawler.getData('http://www.thairath.co.th/content/3');
+    // console.log(JSON.stringify(tmp));
     //  res.send(tmp);
 });
 
