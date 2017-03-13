@@ -2,8 +2,8 @@ var Crawler = require("node-webcrawler");
 var request = require('request');
 var cheerio = require('cheerio');
 var URL = require('url-parse');
-var connectMongo = require('./connection');
-var c = new Crawler();
+
+
 
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
         if(!error && response.statusCode == 200){
           var $ = cheerio.load(body)
 
-          var url = url;
+
           var date = $('time').text().trim();
           var title = $('section[id=headerContent] h1').text().trim();
           var content = $('section[id=mainContent]').text().trim();
@@ -34,17 +34,15 @@ module.exports = {
             img.push(src);
           });
 
-          result = JSON.stringify({
-                      'URL'  : url,
-                       'PostDate' : date,
-                       'Title' : title,
-                       'Content' : content,
-                       'Image'  : img
-                     });
-                     
+          result = {  'URL'  : url,
+                      'PostDate' : date,
+                      'Title' : title,
+                      'Content' : content,
+                      'Image'  : img
+                     };
+
           callback(result);
-        }else{
-          callback(response.statusCode);
+
         }
       });
     }

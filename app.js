@@ -5,6 +5,7 @@ var URL = require('url-parse');
 var express = require('express');
 var app = express();
 var crawler = require('./crawler.js');
+var connectMongo = require('./connection.js');
 
 app.get('/temp', function(req, res) {
 
@@ -12,9 +13,10 @@ app.get('/temp', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-  var result;
-  crawler.getData('http://www.thairath.co.th/content/880611', function(callback) {
-      console.log(callback);
+  crawler.getData('http://www.thairath.co.th/content/880611', function(document) {
+    connectMongo.insert(document, function(message){
+        console.log(message);
+    });
   });
 });
 
