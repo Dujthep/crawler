@@ -1,4 +1,4 @@
-var MongoProcess = require('./MongoProcess');
+var MongoProcess = require('./mongoProcess');
 var Scraper = require('./scraper');
 var Pages = [];
 var numberOfRequests = 5;

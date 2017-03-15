@@ -4,7 +4,7 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
 
-function MongoProcess (data,collection) {
+function mongoProcess (data,collection) {
     this.collection = collection;
     this.document = data;
     this.insert();
@@ -26,6 +26,6 @@ MongoProcess.prototype.insert = function() {
   });
 };
 
-module.exports = MongoProcess;
+module.exports = mongoProcess;
 
 //module.exports = mongoose.model('Listings', ListingsSchema);
