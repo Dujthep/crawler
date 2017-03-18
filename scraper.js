@@ -61,12 +61,16 @@ Scraper.prototype.parsePage = function (html) {
     img.push(src);
   });
 
+  var post_url = this.url;
+  var page_num = post_url.substring(post_url.lastIndexOf("/") + 1, post_url.length);
+
   var model = {
-        'PostUrl'  : this.url,
+        'Seq'  : page_num,
+        'PostUrl'  : post_url,
         'PostDate' : date,
-        'Title' : title,
-        'Content' : content,
-        'Image'  : img
+        'Title'    : title,
+        'Content'  : content,
+        'Image'    : img
 
   };
 

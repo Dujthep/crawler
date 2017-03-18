@@ -1,40 +1,43 @@
 var MongoProcess = require('./mongoProcess');
 var Scraper = require('./scraper');
 var Pages = [];
-var numberOfRequests = 5;
+var numberOfRequests = 10;
+var collection = 'thairath';
 
 // store all urls in a global variable
 Pages = generateUrls(numberOfRequests);
 
 function generateUrls(limit) {
+  MongoProcess.select(collection, function(message){
+    console.log(message);
+  });
+
   var url = 'http://www.thairath.co.th/content/';
   var urls = [];
-  var i;
-  for (i=0; i < limit; i++) {
-    urls.push(url + (i+1));
+  while (limit > 0) {
+    urls.push(url + (limit));
+    limit--;
   }
   return urls;
 }
 
 
 function wizard() {
-  // if the Pages array is empty, we are Done!!
+
   if (!Pages.length) {
     return console.log('Done!!!!');
   }
   var url = Pages.pop();
   var scraper = new Scraper(url);
-  // next request on error
+
   scraper.on('error', function (error) {
-    console.log(error);
+    console.log(error + ' : ' + url);
     wizard();
   });
-  // if the request completed successfully
+
   scraper.on('complete', function (data) {
     //store the results in database
-    var collection = 'thairath';
-    var mongoProcess = new MongoProcess(data,collection);
-    mongoProcess.on('message', function (message) {
+    MongoProcess.insert(data, collection, function(message){
       console.log(message);
     });
     wizard();
