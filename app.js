@@ -1,7 +1,7 @@
 var MongoProcess = require('./mongoProcess');
 var Scraper = require('./scraper');
 var Pages = [];
-var numberOfRequests = 10;
+var numberOfRequests = 3;
 var collection = 'thairath';
 
 // store all urls in a global variable

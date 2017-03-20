@@ -51,6 +51,7 @@ Scraper.prototype.loadWebPage = function () {
 **/
 Scraper.prototype.parsePage = function (html) {
   var $ = cheerio.load(html);
+
   var date = $('time').text().trim();
   var title = $('section[id=headerContent] h1').text().trim();
   var content = $('section[id=mainContent]').text().trim();
@@ -62,10 +63,10 @@ Scraper.prototype.parsePage = function (html) {
   });
 
   var post_url = this.url;
-  var page_num = post_url.substring(post_url.lastIndexOf("/") + 1, post_url.length);
+  var page_num = parseInt(post_url.substring(post_url.lastIndexOf("/") + 1, post_url.length),10);
 
   var model = {
-        'Seq'  : page_num,
+        'Seq'      : page_num,
         'PostUrl'  : post_url,
         'PostDate' : date,
         'Title'    : title,
