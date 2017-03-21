@@ -1,32 +1,57 @@
-var MongoProcess = require('./mongoProcess');
-var Scraper = require('./scraper');
+var MongoProcess = require('./MongoProcess');
+var Scraper = require('./Scraper');
+var fs = require('fs');
+var MasterUrlPath = [];
 var Pages = [];
 var numberOfRequests = 3;
 var collection = 'thairath';
 
+
+// try {
+//   var data = fs.readFileSync('UrlPath.txt', 'utf8');
+//   MasterUrlPath.push(data);
+// } catch(e) {
+//     console.log('Error:', e.stack);
+// }
+
 // store all urls in a global variable
-Pages = generateUrls(numberOfRequests);
+function getUrlPath(){
+  fs.readFile('UrlPath.txt', 'utf8', function(err, callback) {
+    console.log(data);
+    if (err) console.log(err);
+    MasterUrlPath.push(data);
+
+
+  });
+  console.log(MasterUrlPath.length);
+  function callback(data){
+    while(MasterUrlPath.length){
+      Pages = generateUrls(numberOfRequests);
+    }
+  }
+};
 
 function generateUrls(limit) {
+
   MongoProcess.select(collection, function(message){
-    console.log(message);
+    //console.log(message);
   });
 
-  var url = 'http://www.thairath.co.th/content/';
+  var url = MasterUrlPath.pop();
   var urls = [];
   while (limit > 0) {
     urls.push(url + (limit));
     limit--;
   }
   return urls;
-}
-
+};
 
 function wizard() {
 
   if (!Pages.length) {
     return console.log('Done!!!!');
   }
+
   var url = Pages.pop();
   var scraper = new Scraper(url);
 
@@ -36,12 +61,19 @@ function wizard() {
   });
 
   scraper.on('complete', function (data) {
-    //store the results in database
-    MongoProcess.insert(data, collection, function(message){
-      console.log(message);
-    });
+      //store the results in database
+      MongoProcess.insert(data, collection, function(message){
+        console.log(message);
+      });
     wizard();
   });
+
+
+};
+
+function load(){
+  getUrlPath();
+  wizard();
 }
 
-wizard();
+load();

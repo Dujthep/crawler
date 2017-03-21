@@ -7,20 +7,31 @@ var monthNameEngFull  = new Array("January", "February", "March", "April", "May"
 var monthNameEngShot  = new Array("Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
 
 
-function monthNameToNum(fullDate,formate) {
-  var day;
-  var month;
-  var year;
-  if(fullDate != null && fullDate.length > 0){
-      var res = fullDate.split(" ");
+module.exports = {
+  convertMonthNameToNumTH : function(fullDate,formate,callback) {
+    var date;
+    var day;
+    var month;
+    var year;
+    var time;
+    if(fullDate != null && fullDate.length != 0){
+       var res = fullDate.split(" ");
        day = res[0];
-       month = monthNameThaiShot.indexOf(res[1]);
-       month = month ? month + 1 : 'error month';
+
+       switch(formate) {
+            case 'shotmonth':
+                month = monthNameThaiShot.indexOf(res[1]) + 1;
+                break;
+            case 'fullmonth':
+                month = monthNameThaiFull.indexOf(res[1]) + 1;
+                break;
+        }
+
        year = Number(res[2])-543;
+       time = res[3];
+       date = year+"-"+month+"-"+day+" "+time;
 
-      return day +"/"+ month + "/" + year
+       return callback(date);
+    }
   }
-    return 'error';
-}
-
-console.log(monthNameToNum("20 มี.ค. 2537"));
+};

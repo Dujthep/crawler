@@ -37,7 +37,7 @@ module.exports = {
 
         MongoClient.connect(url, function(err, db) {
           if (err) return callback('Connect Error');
-          db.collection(v_this.collection).find().sort({"PostUrl": '1' }, function(err, cursor){
+          db.collection(v_this.collection).find().sort({"Seq": '1' }, function(err, cursor){
             console.log(cursor);
           });
 

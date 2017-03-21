@@ -3,6 +3,7 @@ var cheerio = require('cheerio');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var STATUS_CODES = http.STATUS_CODES;
+var ConvertDate = require('./ConvertDate');
 /*
  * Scraper Constructor
 **/
@@ -52,18 +53,26 @@ Scraper.prototype.loadWebPage = function () {
 Scraper.prototype.parsePage = function (html) {
   var $ = cheerio.load(html);
 
-  var date = $('time').text().trim();
-  var title = $('section[id=headerContent] h1').text().trim();
-  var content = $('section[id=mainContent]').text().trim();
+  var date;
+  var title;
+  var content;
   var img = [];
+  var page_num;
+  var post_url;
+
+  ConvertDate.convertMonthNameToNumTH($('time').text().trim(), 'shotmonth', function(data){
+    date = new Date(data);
+  });
+  title = $('section[id=headerContent] h1').text().trim();
+  content = $('section[id=mainContent]').text().trim();
 
   $('section[id=mainContent] img').each(function(i, element){
     var src = $(element).attr("src");
     img.push(src);
   });
 
-  var post_url = this.url;
-  var page_num = parseInt(post_url.substring(post_url.lastIndexOf("/") + 1, post_url.length),10);
+  post_url = this.url;
+  page_num = parseInt(post_url.substring(post_url.lastIndexOf("/") + 1, post_url.length),10);
 
   var model = {
         'Seq'      : page_num,
