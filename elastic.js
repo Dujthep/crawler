@@ -12,7 +12,7 @@ var client = new elasticsearch.Client({
 // module.exports = client;
 
 module.exports = {
-    search : function() {
+    search: function() {
         client.search({
             index: 'twitter',
         }).then(function(resp) {
@@ -21,5 +21,26 @@ module.exports = {
         }, function(err) {
             console.trace(err.message);
         });
-    }
+    },
+    create: function() {
+        client.index({
+                index: 'index_test',
+                type: 'news',
+                id: '1', // user url for id
+                body: {
+                    url: 'www.test.com',
+                    datetime: '2017-03-23',
+                    title: 'ทำสอบหัวข้อ',
+                    content: 'ทดสอบตัดคำภาษาไทย โดยใช้ elasticsearch ในการช่วยตัดคำ'
+                }
+            },
+            function(error, response) {
+                console.log('es')
+                console.log(response);
+            });
+    },
+    closeConnection: funtion() {
+        client.close();
+    },
+
 };

@@ -1,6 +1,7 @@
 var MongoProcess = require('./MongoProcess');
 var Scraper = require('./Scraper');
 var ReadFiles = require('./ReadFiles');
+var elastic = require('./elastic');
 var fs = require('fs');
 var MasterUrlPath = [];
 var Pages = [];
@@ -19,15 +20,14 @@ var filepath = 'UrlPath.txt';
 
   // store all urls in a global variable
   function getUrlPath(MasterUrlPath){
-  /*  while(MasterUrlPath.length){
+    while(MasterUrlPath.length){
       var url = MasterUrlPath.pop();
       var limit = numberOfRequests;
       while (limit > 0) {
         Pages.push(url + (limit));
         limit--;
       }
-    }*/
-    console.log('ll');
+    }
   };
 
   function generateUrls(limit) {
