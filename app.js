@@ -7,6 +7,12 @@ var Pages = [];
 var numberOfRequests = 3;
 var collection = 'thairath';
 
+var elastic = require('./elastic')
+
+
+elastic.create(function(){
+  
+})
 
   function readFile(){
     ReadFiles.readUrl(function(url){
