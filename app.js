@@ -6,20 +6,28 @@ var MasterUrlPath = [];
 var Pages = [];
 var numberOfRequests = 3;
 var collection = 'thairath';
+var filepath = 'UrlPath.txt';
 
+  var myPromise =  new Promise(function (fulfill, reject){
+      ReadFiles.readUrl(filepath,function(err, res){
+        if (err) reject(err);
+        else fulfill(res);
 
-  function readFile(){
-    ReadFiles.readUrl(function(url){
-      MasterUrlPath = url;
-      console.log(MasterUrlPath);
+      });
     });
-  }
+
 
   // store all urls in a global variable
-  function getUrlPath(){
-    while(MasterUrlPath.length){
-      Pages = generateUrls(numberOfRequests);
-    }
+  function getUrlPath(MasterUrlPath){
+  /*  while(MasterUrlPath.length){
+      var url = MasterUrlPath.pop();
+      var limit = numberOfRequests;
+      while (limit > 0) {
+        Pages.push(url + (limit));
+        limit--;
+      }
+    }*/
+    console.log('ll');
   };
 
   function generateUrls(limit) {
@@ -29,12 +37,12 @@ var collection = 'thairath';
     });
 
     var url = MasterUrlPath.pop();
-    var urls = [];
+
     while (limit > 0) {
-      urls.push(url + (limit));
+      Pages.push(url + (limit));
       limit--;
     }
-    return urls;
+
   };
 
   function wizard() {
@@ -60,4 +68,6 @@ var collection = 'thairath';
     });
   };
 
-readFile();
+myPromise.then(getUrlPath).then(function(){
+ console.log('success');
+});
