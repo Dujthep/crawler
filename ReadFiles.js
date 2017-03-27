@@ -14,16 +14,18 @@ var fs = require('fs');
 
   function readLines(input, callback) {
     var result = [];
-    var remaining = '';
+
     input.on('data', function(data) {
+      var remaining = '';
       remaining += data;
       var index = remaining.indexOf('\r\n');
-      while (index > 0) {
+      while (index > -1) {
         var line = remaining.substring(0, index);
         remaining = remaining.substring(index + 1);
-        index = remaining.indexOf('\r\n');
+
 
         result.push(line);
+        index = remaining.indexOf('\r\n');
       }
     });
 
@@ -31,5 +33,9 @@ var fs = require('fs');
       if (result.length > 0) {
         return callback(result);
       }
+    });
+
+    input.on('error', function(error) {
+        return callback(404);
     });
   }

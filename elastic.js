@@ -39,8 +39,8 @@ module.exports = {
                 console.log(response);
             });
     },
-    closeConnection: funtion() {
-        client.close();
-    },
+    // closeConnection: funtion() {
+    //     client.close();
+    // }
 
 };
