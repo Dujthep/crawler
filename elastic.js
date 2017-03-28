@@ -8,9 +8,7 @@ var client = new elasticsearch.Client({
         // 'https://[username]:[password]@[server]:[port]/'
     ]
 });
-
 // module.exports = client;
-
 module.exports = {
     search: function() {
         client.search({
@@ -22,21 +20,24 @@ module.exports = {
             console.trace(err.message);
         });
     },
-    create: function() {
+    insert: function(data, callback) {
         client.index({
                 index: 'index_test',
                 type: 'news',
-                id: '1', // user url for id
+                id: data.PostUrl,
                 body: {
-                    url: 'www.test.com',
-                    datetime: '2017-03-23',
-                    title: 'ทำสอบหัวข้อ',
-                    content: 'ทดสอบตัดคำภาษาไทย โดยใช้ elasticsearch ในการช่วยตัดคำ'
+                    url: data.PostUrl,
+                    datetime: data.PostDate,
+                    title: data.Title,
+                    content: data.Content
                 }
             },
             function(error, response) {
-                console.log('es')
-                console.log(response);
+                if (response.created) {
+                    return callback("Id :" + data.PostUrl + " create index success")
+                } else {
+                    return callback("Id :" + data.PostUrl + " is duplicate")
+                }
             });
     },
     // closeConnection: funtion() {
