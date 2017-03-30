@@ -16,22 +16,19 @@ var fs = require('fs');
     var result = [];
 
     input.on('data', function(data) {
-      var remaining = '';
-      remaining += data;
-      var index = remaining.indexOf('\r\n');
-      while (index > -1) {
-        var line = remaining.substring(0, index);
-        remaining = remaining.substring(index + 1);
+      var res = data.toString().split("\r\n");
 
-
-        result.push(line);
-        index = remaining.indexOf('\r\n');
+      while (res.length > 0) {
+        var r = res.shift();
+          if(r != ''){
+            result.push(r);
+          }
       }
     });
 
     input.on('end', function() {
       if (result.length > 0) {
-        return callback(result);
+        callback(result);
       }
     });
 
