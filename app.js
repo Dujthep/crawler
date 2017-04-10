@@ -5,8 +5,8 @@ var elastic = require('./elastic');
 
 var MasterUrlPath = [];
 var Pages = [];
-var numberOfRequests = 3;
-var Collection = 'thairath';
+var numberOfRequests = 5;
+var Collection = null;
 var filepath = 'UrlPath.txt';
 var dateStart = Date.now();
 
@@ -25,11 +25,12 @@ function readFile() {
 function generateUrls(MasterUrlPath) {
     while (MasterUrlPath.length) {
         var url = MasterUrlPath.shift();
-        var pageName = url.split('/');
-        Collection = pageName[2];
+        Collection = url.substring(11, url.lastIndexOf('.co.th'));
 
-        MongoProcess.select(Collection, function(url) {
-            //console.log(url);
+        MongoProcess.select(Collection, function(docs) {
+          docs.forEach(function(doc){
+            console.log(doc);
+          });
         });
 
         var limit = numberOfRequests;
@@ -54,11 +55,11 @@ function wizard() {
 
       scraper.on('complete', function(data) {
           //store the results in database
-          console.log('Complete : ' + url);
+          //console.log('Complete : ' + url);
         /*   MongoProcess.insert(data, Collection, function(message) {
               console.log(message);
           });
-         elastic.insert(data, function(message) {
+        elastic.insert(data, function(message) {
               console.log(message);
           }); */
           wizard();

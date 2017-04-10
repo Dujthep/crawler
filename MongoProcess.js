@@ -37,8 +37,11 @@ module.exports = {
 
         MongoClient.connect(url, function(err, db) {
           if (err) return callback('Connect Error');
-          db.collection(v_this.collection).find().sort({"Seq": '1' }, function(err, cursor){
-            console.log(cursor);
+          
+          var query = {'PostUrl' : 1, '_id' : 0};
+          var options = {"sort" : ['Seq', 'asc']};
+          db.collection(v_this.collection).find({}, query, options).toArray(function(err, docs){
+            return callback(docs);
           });
 
           db.close();
