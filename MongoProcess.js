@@ -12,7 +12,7 @@ module.exports = {
       MongoClient.connect(url, function(err, db) {
         if (err) return callback('Connect Error : ' + v_this.document.PostUrl);
 
-       db.collection(v_this.collection).insert(v_this.document, function(err, records) {
+        db.collection(v_this.collection).insert(v_this.document, function(err, records) {
           if (err) return callback('Insert Error : ' + v_this.document.PostUrl);
           return callback('Insert Success : ' + v_this.document.PostUrl);
         });
@@ -20,10 +20,14 @@ module.exports = {
         db.close();
       });
     },
-    update : function(){
-      MongoClient.connect(url, function(err, db) {
-        if (err) return callback('Connect Error');
+    update : function(data, collection, callback){
+      this.collection = collection;
+      this.document = data;
+      var v_this = this;
 
+      MongoClient.connect(url, function(err, db) {
+      //  if (err) return callback('Connect Error');
+        db.collection(v_this.collection).update( v_this.document,{ upsert: true } );
 
         db.close();
       });
@@ -37,11 +41,11 @@ module.exports = {
 
         MongoClient.connect(url, function(err, db) {
           if (err) return callback('Connect Error');
-          
-          var query = {'PostUrl' : 1, '_id' : 0};
-          var options = {"sort" : ['Seq', 'asc']};
-          db.collection(v_this.collection).find({}, query, options).toArray(function(err, docs){
-            return callback(docs);
+
+
+          var options = {"sort" : ['Seq', 'desc']};
+          db.collection(v_this.collection).findOne({},options, function(err, document) {
+            return callback(document);
           });
 
           db.close();

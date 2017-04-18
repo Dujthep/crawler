@@ -3,23 +3,22 @@ var cheerio = require('cheerio');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var STATUS_CODES = http.STATUS_CODES;
-var ConvertDate = require('./ConvertDate');
-/*
- * Scraper Constructor
-**/
-function Scraper (url) {
+var ConvertDate = require('../Util/ConvertDate');
+
+
+function ThairatScraper (url) {
     this.url = url;
     this.init();
 }
 /*
  * Make it an EventEmitter
 **/
-util.inherits(Scraper, EventEmitter);
+util.inherits(ThairatScraper, EventEmitter);
 
 /*
  * Initialize scraping
 **/
-Scraper.prototype.init = function () {
+ThairatScraper.prototype.init = function () {
     var model;
     var self = this;
     self.on('loaded', function (html) {
@@ -29,7 +28,7 @@ Scraper.prototype.init = function () {
     self.loadWebPage();
 };
 
-Scraper.prototype.loadWebPage = function () {
+ThairatScraper.prototype.loadWebPage = function () {
   var self = this;
   http.get(self.url, function (res) {
     var body = '';
@@ -47,10 +46,11 @@ Scraper.prototype.loadWebPage = function () {
     self.emit('error', err);
   });
 };
+
 /*
  * Parse html and return an object
 **/
-Scraper.prototype.parsePage = function (html) {
+ThairatScraper.prototype.parsePage = function (html) {
   var $ = cheerio.load(html);
 
   var date;
@@ -86,4 +86,4 @@ Scraper.prototype.parsePage = function (html) {
 
   return model;
 };
-module.exports = Scraper;
+module.exports = ThairatScraper;

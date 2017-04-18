@@ -1,15 +1,17 @@
-var MongoProcess = require('./MongoProcess');
-var Scraper = require('./Scraper');
+
+var ThairatController = require('./Controller/ThairatController');
 var ReadFiles = require('./ReadFiles');
-var elastic = require('./elastic');
+var elastic = require('./Elastic');
 
 var MasterUrlPath = [];
 var Pages = [];
 var numberOfRequests = 5;
 var Collection = null;
-var filepath = 'UrlPath.txt';
-var dateStart = Date.now();
+var filepath = 'MasterUrl.txt';
 
+/*
+ * Read the Master url
+**/
 function readFile() {
     return new Promise(function(resolve, reject) {
         ReadFiles.readUrl(filepath, function(data) {
@@ -20,50 +22,26 @@ function readFile() {
     });
 }
 
-
-// store all urls in a global variable
+/*
+ * Store all urls in a global variable
+**/
 function generateUrls(MasterUrlPath) {
     while (MasterUrlPath.length) {
+      
         var url = MasterUrlPath.shift();
         Collection = url.substring(11, url.lastIndexOf('.co.th'));
 
-        MongoProcess.select(Collection, function(docs) {
-          docs.forEach(function(doc){
-            console.log(doc);
-          });
-        });
-
-        var limit = numberOfRequests;
-        while (limit > 0) {
-            Pages.push(url + (limit));
-            limit--;
+        switch(Collection) {
+          case 'thairath':
+              new ThairatController(url, numberOfRequests, Collection);
+              break;
+          default:
+              console.log('url not found');
         }
-       wizard();
-    }
-};
-
-function wizard() {
-
-    if (Pages.length) {
-      var url = Pages.shift();
-      var scraper = new Scraper(url);
-
-      scraper.on('error', function(error) {
-          console.log(error + ' : ' + url);
-          wizard();
-      });
-
-      scraper.on('complete', function(data) {
-          //store the results in database
-          //console.log('Complete : ' + url);
-        /*   MongoProcess.insert(data, Collection, function(message) {
-              console.log(message);
-          });
-        elastic.insert(data, function(message) {
-              console.log(message);
-          }); */
-          wizard();
-      });
+    /*    MongoProcess.select(Collection, function(err,docs) {
+          if (err) console.log(err);
+          console.log(docs);
+        }); */
     }
 };
 
